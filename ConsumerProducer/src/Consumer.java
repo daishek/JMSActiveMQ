@@ -49,7 +49,7 @@ public class Consumer {
     }
 
     public static void main(String[] args) {
-        new Consumer("MyQueue");
+        new Consumer("Tp2Q");
     }
 
 }

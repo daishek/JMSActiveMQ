@@ -1,5 +1,6 @@
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -27,8 +28,13 @@ public class Producer {
             conn.start();
             session = conn.createSession(useTransaction, Session.AUTO_ACKNOWLEDGE);
             // session = conn.createSession(useTransaction, Session.CLIENT_ACKNOWLEDGE);
-            destination = session.createQueue("MyQueue");
+            destination = session.createQueue("Tp2Q");
             producer = session.createProducer(destination);
+
+            /* change */
+            producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+            /* ------ */
+            
             message = (Message) session.createTextMessage(messageToSend);
             producer.send(message);
         } catch (JMSException jmsEx) {
