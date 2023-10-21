@@ -51,7 +51,7 @@ public class QueueProducer {
         BufferedReader entree = new BufferedReader(new InputStreamReader(System.in));
         String ligne = null;
 
-        long currentTime, experationTime;
+        long timeToLive;
 
         int i = 1;
         while (i <= 10) {
@@ -62,12 +62,9 @@ public class QueueProducer {
                 msg.setTexte(ligne);
                 ObjectMessage _message = session.createObjectMessage(msg);
                 
-
                 /* delete a message after a certain time if no clients retrieve the message.*/
-                currentTime = System.currentTimeMillis();
-                // experationTime = currentTime + 10 * 60 * 1000; // expire after 10 minutes
-                experationTime = currentTime + 10 * 1000; // expire after 10 seconds
-                _message.setJMSExpiration(experationTime);
+                timeToLive = 1000; // expire after 5 seconds
+                producer.setTimeToLive(timeToLive);
                 
                 producer.send(_message);
             } catch (Exception e) {
