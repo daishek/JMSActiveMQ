@@ -8,8 +8,7 @@ The project at hand is a comprehensive and modular implementation of Apache Acti
 
 1.  Download .zip or clone the project
 
-    git clone https://github.com/daishek/JMSActiveMQ.git
-
+        git clone https://github.com/daishek/JMSActiveMQ.git
 2.  Download requirments
     - [activemq from apache](https://activemq.apache.org/)
     - [Log4j](https://logging.apache.org/log4j/2.x/download.html)
