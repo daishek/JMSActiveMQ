@@ -21,7 +21,7 @@ public class QueueProducer {
     Message message;
     boolean useTransaction = false;
     MessageProducer producer = null;
-    
+
     public QueueProducer() {
         try {
             connFactory = new ActiveMQConnectionFactory();
@@ -50,15 +50,26 @@ public class QueueProducer {
     public void publish() throws JMSException {
         BufferedReader entree = new BufferedReader(new InputStreamReader(System.in));
         String ligne = null;
-        while (true) {
+
+        long currentTime, experationTime;
+
+        int i = 1;
+        while (i <= 10) {
             System.out.println("Input text =>");
             try {
                 MyMsg msg = new MyMsg();
                 ligne = entree.readLine();
                 msg.setTexte(ligne);
                 ObjectMessage _message = session.createObjectMessage(msg);
+                
+
+                /* delete a message after a certain time if no clients retrieve the message.*/
+                currentTime = System.currentTimeMillis();
+                // experationTime = currentTime + 10 * 60 * 1000; // expire after 10 minutes
+                experationTime = currentTime + 10 * 1000; // expire after 10 seconds
+                _message.setJMSExpiration(experationTime);
+                
                 producer.send(_message);
-                // break;
             } catch (Exception e) {
                 e.printStackTrace();
             }

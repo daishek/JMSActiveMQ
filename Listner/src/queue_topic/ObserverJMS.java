@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.jms.Connection;
 import javax.jms.MessageConsumer;
+import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TopicSession;
 import javax.naming.Context;
@@ -19,6 +20,8 @@ public class ObserverJMS {
     private MessageConsumer msgTopicConsumer;
     private MessageConsumer msgQueueConsumer;
     protected Connection conn;
+
+    private Session topicSession, queueSession;
     
     public ObserverJMS(int clientNumber) {
         try {
@@ -34,14 +37,15 @@ public class ObserverJMS {
             topicDestination = new ActiveMQTopic("MyTopicForQT");
             queueDestination = new ActiveMQQueue("MyQueueForQT");
 
-            Session session = conn.createSession(true, TopicSession.AUTO_ACKNOWLEDGE);
+            queueSession = conn.createSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+            topicSession = conn.createSession(false, TopicSession.AUTO_ACKNOWLEDGE);
 
             // recieve messages from queue listner
-            msgQueueConsumer = session.createConsumer(queueDestination);
+            msgQueueConsumer = queueSession.createConsumer(queueDestination);
             msgQueueConsumer.setMessageListener(new ConsumerMsgListner());
             
             // recieve messages from topic listner
-            msgTopicConsumer = session.createConsumer(topicDestination);
+            msgTopicConsumer = topicSession.createConsumer(topicDestination);
             msgTopicConsumer.setMessageListener(new ConsumerMsgListner());
 
             System.out.println("// Client // #" + clientNumber);
