@@ -1,4 +1,4 @@
-package queue_topic;
+package GUI;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,7 +13,7 @@ import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-public class QueueProducer {
+public class SendToTopic {
     ActiveMQConnectionFactory connFactory;
     Connection conn = null;
     Session session = null;
@@ -22,17 +22,17 @@ public class QueueProducer {
     boolean useTransaction = false;
     MessageProducer producer = null;
 
-    public QueueProducer() {
+    public SendToTopic(String inputMsg) {
         try {
             connFactory = new ActiveMQConnectionFactory();
             conn = connFactory.createConnection();
             conn.start();
 
             session = conn.createSession(useTransaction, Session.AUTO_ACKNOWLEDGE);
-            destination = session.createQueue("MyQueueForQT");
+            destination = session.createTopic("MyTopicForQT");
             producer = session.createProducer(destination);
             
-            publish();
+            publish(inputMsg);
         }  catch (JMSException jmsEx) {
 
         }finally {
@@ -45,36 +45,18 @@ public class QueueProducer {
             }
         }
     }
+    
 
+    public void publish(String inputMsg) throws JMSException {
 
-    public void publish() throws JMSException {
-        BufferedReader entree = new BufferedReader(new InputStreamReader(System.in));
-        String ligne = null;
-
-        long timeToLive;
-
-        int i = 1;
-        while (i <= 10) {
-            System.out.println("Input text =>");
             try {
                 MyMsg msg = new MyMsg();
-                ligne = entree.readLine();
-                msg.setTexte(ligne);
+                msg.setTexte(inputMsg);
                 ObjectMessage _message = session.createObjectMessage(msg);
-                
-                /* delete a message after a certain time if no clients retrieve the message.*/
-                timeToLive = 1000; // expire after 5 seconds
-                producer.setTimeToLive(timeToLive);
-                
                 producer.send(_message);
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new QueueProducer();
-    }
 }
-
