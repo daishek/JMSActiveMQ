@@ -20,5 +20,17 @@ The project at hand is a comprehensive and modular implementation of Apache Acti
     - cretae a new folder **USER** inside **lib** directory
     - You simply need to add the two JAR files: log4japi-2.20.0 and log4j-core-2.20.0. into **USER** directory
 
+> **Important**
+> Folder structure
+>  - **project**
+> 	 - **bin**
+> 	 - **lib**
+> 		- **USER**
+> 			 - *log4j-api-2.20.0.jar*
+> 			 - *log4j-core-2.20.0.jar*
+> 		- *activemq-all-5.18.2.jar*
+> 	 - **src**
+> 		 - *App.java*
+
 4.  Run ActiveMQ
     cd to activemq\bin and run `activemq start`
